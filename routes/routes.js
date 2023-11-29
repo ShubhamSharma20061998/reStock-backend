@@ -14,11 +14,13 @@ const {
 const productCtrl = require("../app/controllers/products-ctrl");
 const shopDetailsCltr = require("../app/controllers/shopDetails-cltr");
 const shopDetails = require("../app/helpers/shopDetails-validation");
+const upload = require("../app/middlewares/userRegisterFiles");
 const router = express.Router();
 //users api's start
 // Admin register
 router.post(
   "/api/user_register",
+  upload.array("certificates"),
   checkSchema(userRegisterValidation),
   userCtrl.register
 );
@@ -73,7 +75,12 @@ router.put(
 
 // shopDetails api's start
 // list shops
-router.get("/api/getShops", shopDetailsCltr.getAllShops);
+router.get(
+  "/api/getShops",
+  authenticateUser,
+  authorization(["admin"]),
+  shopDetailsCltr.getAllShops
+);
 // create shop
 router.post(
   "/api/create_shop",

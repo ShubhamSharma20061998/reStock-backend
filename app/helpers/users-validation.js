@@ -12,7 +12,7 @@ const usernameRegisterSchema = {
 
 const passwordLoginSchema = {
   notEmpty: {
-    errorMessage: "username is required",
+    errorMessage: "password is required",
   },
 };
 

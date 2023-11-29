@@ -42,7 +42,7 @@ productCtrl.createProduct = async (req, res) => {
       category: body.category,
     });
     if (existingProduct) {
-      return res.json({ errors: "product already exists" });
+      return res.json({ errors: [{ msg: "product already exists" }] });
     }
     if (req.user.role == "admin") {
       await product.save();

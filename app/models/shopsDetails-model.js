@@ -6,6 +6,7 @@ const shopDetailsSchema = new Schema(
     shopName: String,
     ownerFirstName: String,
     ownerLastName: String,
+    email: String,
     contact: Number,
     alternateContact: Number,
     shopAddress: [

@@ -141,18 +141,13 @@ const shopDetails = {
     },
   },
   "shopAddress.*.shopContact": {
-    isMobilePhone: {
-      options: ["any"],
-      errorMessage: "invalid format",
-    },
-    optional: {
-      options: {
-        nullable: true,
-      },
+    matches: {
+      options: /^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/,
+      errorMessage:'Invalid format'
     },
   },
   gstNo: gstNoSchema,
-  // owner: ownerSchema,
+  owner: ownerSchema,
 };
 
 module.exports = shopDetails;
