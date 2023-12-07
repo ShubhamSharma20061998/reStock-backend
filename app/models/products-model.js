@@ -19,10 +19,10 @@ const productSchema = new Schema(
     price: Number,
     description: String,
     rating: Number,
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-    },
+    // category: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Category",
+    // },
     maxOrderUnit: Number,
     minOrderUnit: Number,
     slug: String,

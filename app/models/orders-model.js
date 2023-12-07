@@ -10,7 +10,7 @@ const orderSchema = new Schema(
     },
     lineItems: [
       {
-        items: Schema.Types.ObjectId,
+        item: Schema.Types.ObjectId,
         quantity: Number,
         amount: Number,
       },
@@ -19,22 +19,17 @@ const orderSchema = new Schema(
       {
         title: {
           type: String,
-          enum: [
-            "not processed",
-            "processing",
-            "shipped",
-            "delivered",
-            "cancel",
-          ],
+          enum: ["recieved", "shipped", "delivered", "cancel"],
         },
+        default: "not processed",
       },
     ],
     shopID: Schema.Types.ObjectId,
     expectedDeliverDate: Date,
-    complaints: {
-      note: String,
-      images: [{ image: String }],
-    },
+    // complaints: {
+    //   note: String,
+    //   images: [{ image: String }],
+    // },
   },
   { timestamps: true }
 );

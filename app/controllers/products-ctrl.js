@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
 const Products = require("../models/products-model");
+const uploadToS3 = require("../middlewares/aws");
 
 const productCtrl = {};
 
@@ -34,7 +35,8 @@ productCtrl.createProduct = async (req, res) => {
     "minOrderUnit",
   ]);
   const product = new Products(body);
-  product.slug = body.title.split(" ").join("-");
+  const files = req.files;
+  product.slug = body.title.split(" ").join("-") || body.title;
   try {
     const existingProduct = await Products.findOne({
       title: body.title,
@@ -43,6 +45,10 @@ productCtrl.createProduct = async (req, res) => {
     });
     if (existingProduct) {
       return res.json({ errors: [{ msg: "product already exists" }] });
+    }
+    for (const file of files) {
+      const uploadResult = await uploadToS3(file, req.user.id);
+      product.images.push(uploadResult);
     }
     if (req.user.role == "admin") {
       await product.save();

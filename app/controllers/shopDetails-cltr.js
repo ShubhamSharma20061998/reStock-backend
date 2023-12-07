@@ -1,3 +1,7 @@
+/**
+ * Controller for managing shop details.
+ * @module shopDetailsCltr
+ */
 require("dotenv").config();
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
@@ -6,6 +10,13 @@ const ShopsDetails = require("../models/shopsDetails-model");
 
 const shopDetailsCltr = {};
 
+/**
+ * Retrieves all shop details from the database and sends them as a JSON response.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns None
+ * @throws {Error} If there is an error retrieving the shop details from the database.
+ */
 shopDetailsCltr.getAllShops = async (req, res) => {
   try {
     const shops = await ShopsDetails.find();
@@ -15,6 +26,15 @@ shopDetailsCltr.getAllShops = async (req, res) => {
   }
 };
 
+/**
+ * Creates a nodemailer transporter object with the specified configuration.
+ * @param {Object} config - The configuration object for the transporter.
+ * @param {string} config.service - The email service to use (e.g. "gmail").
+ * @param {Object} config.auth - The authentication credentials for the email service.
+ * @param {string} config.auth.user - The email address or username.
+ * @param {string} config.auth.pass - The password or access token.
+ * @returns None
+ */
 const transporter = nodemailer.createTransport({
   //Initialise nodemailer
   service: "gmail",
@@ -54,12 +74,12 @@ shopDetailsCltr.createAccount = async (req, res) => {
     "owner",
   ]);
   try {
-    // const registerShop = await ShopsDetails.findOne({
-    //   shopName: body.shopName,
-    // });
-    // if (registerShop) {
-    //   return res.status(400).json({ errors: "shop already exists" });
-    // }
+    const registerShop = await ShopsDetails.findOne({
+      shopName: body.shopName,
+    });
+    if (registerShop) {
+      return res.status(400).json({ errors: [{ msg: "shop already exists" }] });
+    }
     const newShop = new ShopsDetails(body);
     await newShop.save();
     if (body.email) {
@@ -110,7 +130,6 @@ shopDetailsCltr.updateShopDetails = async (req, res) => {
 
 shopDetailsCltr.removeShop = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     if (req.user.role == "admin") {
       const removeShop = await ShopsDetails.findOneAndDelete({ _id: id });

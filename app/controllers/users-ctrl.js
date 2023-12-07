@@ -3,6 +3,7 @@ const _ = require("lodash");
 const User = require("../models/users-model");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const ShopsDetails = require("../models/shopsDetails-model");
 
 const userCtrl = {};
 
@@ -98,7 +99,7 @@ userCtrl.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     if (req.user.role == "admin") {
-      const user = await User.findOneAndDelete({ _id: id });
+      const user = await ShopsDetails.findOneAndDelete({ _id: id });
       res.json({ message: "user removed successfully", user });
     } else {
       res.status(403).json({ error: "access denied" });

@@ -13,9 +13,13 @@ const {
 } = require("../app/middlewares/authentication");
 const productCtrl = require("../app/controllers/products-ctrl");
 const shopDetailsCltr = require("../app/controllers/shopDetails-cltr");
+const paymentCltr = require("../app/controllers/payment-cltr");
 const shopDetails = require("../app/helpers/shopDetails-validation");
 const upload = require("../app/middlewares/userRegisterFiles");
+const cartValidation = require("../app/helpers/carts-validation");
+const cartCltr = require("../app/controllers/carts-cltr");
 const router = express.Router();
+
 //users api's start
 // Admin register
 router.post(
@@ -51,7 +55,9 @@ router.get("/api/getProducts", productCtrl.getAllProducts);
 // product creation
 router.post(
   "/api/create_product",
-  checkSchema(productValidation),
+  upload.array("images"),
+  // upload.array("images",12),
+  // checkSchema(productValidation),
   authenticateUser,
   authorization(["admin"]),
   productCtrl.createProduct
@@ -106,4 +112,50 @@ router.delete(
 );
 // shopDetails api's end
 
+//cart api's start
+//list cart items
+router.get(
+  "/api/getCartItems",
+  authenticateUser,
+  authorization(["user"]),
+  cartCltr.getAllItems
+);
+//create cart item
+router.post(
+  "/api/create-cart/:id",
+  authenticateUser,
+  authorization(["user"]),
+  checkSchema(cartValidation),
+  cartCltr.createItems
+);
+// delete cart item
+router.delete(
+  "/api/remove-item/:id",
+  authenticateUser,
+  authorization(["user"]),
+  cartCltr.removeItem
+);
+//increase item
+router.post(
+  "/api/increase_quantity/:id",
+  authenticateUser,
+  authorization(["user"]),
+  cartCltr.increaseQuantity
+);
+// decrease item
+router.post(
+  "/api/decrease_quantity/:id",
+  authenticateUser,
+  authorization(["user"]),
+  cartCltr.decreaseQuantity
+);
+// cart api's end
+
+//payment api
+router.post(
+  "/api/payment",
+  authenticateUser,
+  authorization(["user"]),
+  paymentCltr.create
+);
 module.exports = router;
