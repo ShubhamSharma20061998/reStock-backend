@@ -6,7 +6,39 @@ const uploadToS3 = require("../middlewares/aws");
 const productCtrl = {};
 
 productCtrl.getAllProducts = async (req, res) => {
+  const { condition } = req.query;
   try {
+    if (condition == "a-z") {
+      const products = await Products.aggregate([{ $sort: { title: 1 } }]);
+      return res.json(products);
+    } else if (condition == "z-a") {
+      const products = await Products.aggregate([
+        {
+          $sort: {
+            title: -1,
+          },
+        },
+      ]);
+      return res.json(products);
+    } else if (condition == "lowest-highest") {
+      const products = await Products.aggregate([
+        {
+          $sort: {
+            price: 1,
+          },
+        },
+      ]);
+      return res.json(products);
+    } else if (condition == "highest-lowest") {
+      const products = await Products.aggregate([
+        {
+          $sort: {
+            price: -1,
+          },
+        },
+      ]);
+      return res.json(products);
+    }
     const products = await Products.find();
     res.json(products);
   } catch (err) {

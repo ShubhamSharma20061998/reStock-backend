@@ -5,8 +5,8 @@
 require("dotenv").config();
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
-const nodemailer = require("nodemailer");
 const ShopsDetails = require("../models/shopsDetails-model");
+const { transporter } = require("../../utils/backend-utils");
 
 const shopDetailsCltr = {};
 
@@ -35,15 +35,6 @@ shopDetailsCltr.getAllShops = async (req, res) => {
  * @param {string} config.auth.pass - The password or access token.
  * @returns None
  */
-const transporter = nodemailer.createTransport({
-  //Initialise nodemailer
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_ID,
-    pass: process.env.G_PASS,
-  },
-});
-
 transporter.verify((err, success) => {
   //check for initialisation status
   if (err) {

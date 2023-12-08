@@ -149,6 +149,13 @@ router.post(
   authorization(["user"]),
   cartCltr.decreaseQuantity
 );
+//empty cart
+router.post(
+  "/api/empty-cart",
+  authenticateUser,
+  authorization(["user"]),
+  cartCltr.removeMultipleItems
+);
 // cart api's end
 
 //payment api
@@ -157,5 +164,26 @@ router.post(
   authenticateUser,
   authorization(["user"]),
   paymentCltr.create
+);
+
+router.put(
+  "/api/payment/:id",
+  authenticateUser,
+  authorization(["user"]),
+  paymentCltr.update
+);
+
+router.delete(
+  "/api/payment/:id",
+  authenticateUser,
+  authorization(["user"]),
+  paymentCltr.delete
+);
+
+router.get(
+  "/api/payment",
+  authenticateUser,
+  authorization(["user"]),
+  paymentCltr.list
 );
 module.exports = router;

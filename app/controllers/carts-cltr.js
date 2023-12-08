@@ -6,9 +6,9 @@ const cartCltr = {};
 
 cartCltr.getAllItems = async (req, res) => {
   try {
-    const cartItems = await Cart.find({ userID: req.user.id }).populate(
-      "productID"
-    );
+    const cartItems = await Cart.find({ userID: req.user.id })
+      .populate("productID")
+      .populate("userID");
     res.json({ message: "Added to cart", cartItems });
   } catch (err) {
     res.status(500).json(err);
@@ -82,6 +82,17 @@ cartCltr.decreaseQuantity = async (req, res) => {
       { new: true }
     );
     res.json(response);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+cartCltr.removeMultipleItems = async (req, res) => {
+  const body = _.pick(req.body, ["ids"]);
+  const { ids } = body; // send array of objectIds
+  try {
+    const result = await Cart.deleteMany({ _id: { $in: ids } });
+    res.json({ message: `${result.deletedCount} item(s) deleted` });
   } catch (err) {
     res.status(500).json(err);
   }
