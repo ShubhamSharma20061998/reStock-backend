@@ -18,6 +18,7 @@ const shopDetails = require("../app/helpers/shopDetails-validation");
 const upload = require("../app/middlewares/userRegisterFiles");
 const cartValidation = require("../app/helpers/carts-validation");
 const cartCltr = require("../app/controllers/carts-cltr");
+const ordercltr = require("../app/controllers/orders-ctlr");
 const router = express.Router();
 
 //users api's start
@@ -186,4 +187,43 @@ router.get(
   authorization(["user"]),
   paymentCltr.list
 );
+// payment api's end
+
+// orders api's start
+//create
+router.post(
+  "/api/create-order",
+  // authenticateUser,
+  // authorization(["user"]),
+  ordercltr.create
+);
+//update
+router.put(
+  "/api/update-order/:id",
+  // authenticateUser,
+  // authorization(["admin"]),
+  ordercltr.update
+);
+//delete
+router.delete(
+  "/api/reject-order/:id",
+  // authenticateUser,
+  // authorization(["admin"])
+  ordercltr.delete
+);
+//list orders
+router.get(
+  "/api/getAllOrders",
+  // authenticateUser,
+  // authorization(["admin"]),
+  ordercltr.list
+);
+//list user order
+router.get(
+  "/api/orders/:id",
+  // authenticateUser,
+  // authorization(["user"]),
+  ordercltr.getUserOrder
+);
+// orders api's end
 module.exports = router;

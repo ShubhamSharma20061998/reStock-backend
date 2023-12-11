@@ -44,7 +44,7 @@ cartCltr.createItems = async (req, res) => {
       cart,
     });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
   }
 };
 
@@ -54,7 +54,7 @@ cartCltr.removeItem = async (req, res) => {
     const item = await Cart.findOneAndDelete({ _id: id });
     res.json(item);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
   }
 };
 
@@ -68,7 +68,7 @@ cartCltr.increaseQuantity = async (req, res) => {
     );
     res.json(response);
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
     // res.status(500).json(err.response.data.errors);
   }
 };
@@ -83,7 +83,7 @@ cartCltr.decreaseQuantity = async (req, res) => {
     );
     res.json(response);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
   }
 };
 
@@ -94,7 +94,7 @@ cartCltr.removeMultipleItems = async (req, res) => {
     const result = await Cart.deleteMany({ _id: { $in: ids } });
     res.json({ message: `${result.deletedCount} item(s) deleted` });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.message }] });
   }
 };
 

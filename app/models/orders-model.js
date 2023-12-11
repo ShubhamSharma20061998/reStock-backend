@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const orderSchema = new Schema(
   {
-    orderDate: new Date(),
+    orderDate: String,
     orderOwner: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -15,16 +15,12 @@ const orderSchema = new Schema(
         amount: Number,
       },
     ],
-    status: [
-      {
-        title: {
-          type: String,
-          enum: ["recieved", "shipped", "delivered", "cancel"],
-        },
-        default: "not processed",
-      },
-    ],
-    shopID: Schema.Types.ObjectId,
+    status: {
+      type: String,
+      enum: ["not processed", "accepted", "shipped", "delivered", "cancel"],
+      default: "not processed",
+    },
+    // shopID: Schema.Types.ObjectId,
     expectedDeliverDate: Date,
     // complaints: {
     //   note: String,
