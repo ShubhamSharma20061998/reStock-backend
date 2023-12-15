@@ -31,7 +31,7 @@ userCtrl.register = async (req, res) => {
       user,
     });
   } catch (err) {
-    res.json(err);
+    res.status(500).json({ errors: [{ msg: err.response.data.errors }] });
   }
 };
 
@@ -72,7 +72,7 @@ userCtrl.login = async (req, res) => {
       user,
     });
   } catch (err) {
-    res.json(err);
+    res.status(500).json({ errors: [{ msg: err.response.data.errors }] });
   }
 };
 
@@ -85,13 +85,20 @@ userCtrl.updateUser = async (req, res) => {
   const { id } = req.params;
   try {
     if (req.user.id == id || req.user.role == "admin") {
-      const user = await User.findOne({ _id: id }, body, { new: true });
+      const user = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          username: body.username,
+          email: body.email,
+        },
+        { new: true }
+      );
       res.json({ message: "user updated successfully", user });
     } else {
       res.status(403).json({ error: "access denied" });
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.response.data.errors }] });
   }
 };
 
@@ -105,7 +112,7 @@ userCtrl.deleteUser = async (req, res) => {
       res.status(403).json({ error: "access denied" });
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.response.data.errors }] });
   }
 };
 
@@ -114,7 +121,7 @@ userCtrl.listUsers = async (req, res) => {
     const users = await User.find({ role: "user" });
     res.json(users);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ errors: [{ msg: err.response.data.errors }] });
   }
 };
 

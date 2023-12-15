@@ -38,7 +38,6 @@ router.put(
   "/api/update_users/:id",
   checkSchema(userUpdateValidation),
   authenticateUser,
-  authorization(["admin"]),
   userCtrl.updateUser
 );
 // delete users
@@ -115,12 +114,7 @@ router.delete(
 
 //cart api's start
 //list cart items
-router.get(
-  "/api/getCartItems",
-  authenticateUser,
-  authorization(["user"]),
-  cartCltr.getAllItems
-);
+router.get("/api/getCartItems", authenticateUser, cartCltr.getAllItems);
 //create cart item
 router.post(
   "/api/create-cart/:id",
@@ -190,13 +184,20 @@ router.get(
 // payment api's end
 
 // orders api's start
-//create
-router.post(
-  "/api/create-order",
+// list owner orders
+router.get(
+  "/api/getPendingOrders",
   // authenticateUser,
-  // authorization(["user"]),
-  ordercltr.create
-);
+  // authorization(["admin"]),
+  ordercltr.listOwnerOrders
+),
+  //create
+  router.post(
+    "/api/create-order",
+    // authenticateUser,
+    // authorization(["user"]),
+    ordercltr.create
+  );
 //update
 router.put(
   "/api/update-order/:id",
@@ -225,5 +226,7 @@ router.get(
   // authorization(["user"]),
   ordercltr.getUserOrder
 );
+
 // orders api's end
+
 module.exports = router;

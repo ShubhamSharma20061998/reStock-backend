@@ -10,7 +10,10 @@ const orderSchema = new Schema(
     },
     lineItems: [
       {
-        item: Schema.Types.ObjectId,
+        item: {
+          type: Schema.Types.ObjectId,
+          ref: "Products",
+        },
         quantity: Number,
         amount: Number,
       },
