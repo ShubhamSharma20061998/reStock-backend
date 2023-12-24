@@ -84,7 +84,7 @@ router.put(
 router.get(
   "/api/getShops",
   authenticateUser,
-  authorization(["admin"]),
+  // authorization(["admin"]),
   shopDetailsCltr.getAllShops
 );
 // create shop
