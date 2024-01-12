@@ -50,8 +50,8 @@ paymentCltr.create = async (req, res) => {
           quantity: item.quantity,
         };
       }),
-      success_url: "https://restock-shubham.netlify.app/?success=true",
-      cancel_url: "https://restock-shubham.netlify.app/?cancel=true",
+      success_url: "https://restock-shubham.netlify.app/cart?success=true",
+      cancel_url: "https://restock-shubham.netlify.app/cart?cancel=true",
       client_reference_id: req.user.id,
     });
     const payment = new Payment(body);
